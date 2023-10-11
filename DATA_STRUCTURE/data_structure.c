@@ -39,6 +39,28 @@ node* insertingADataToCircularList(node* );
 
 
 
+//HERE FOR 
+
+struct dataStructuresforDoubly{
+	int data;
+	struct dataStructuresforDoubly *next;
+	struct dataStructuresforDoubly *previous;
+};
+
+typedef struct dataStructuresforDoubly bigNode;
+
+bigNode* creatingADoubleLinkedList(bigNode*);
+void printingDoubleLinkedList(bigNode*);
+bigNode* destroyingADoubleLinkedList(bigNode*);
+void countingNodeInADoubleList(bigNode*);
+bigNode* deletingADataFromADoubleList(bigNode*);
+bigNode* insertingADatatoDoubleList(bigNode*);
+//DOUBLE
+
+
+
+
+
 void getInformation(int);
 
 int main(int argc, char *argv[]) {
@@ -46,6 +68,7 @@ int main(int argc, char *argv[]) {
 		//INITIALIZATIONS
 		int typeOfStruct,choice,dataForStack,stackType;
 		node* head=NULL;	
+		bigNode* headForDouble=NULL;
 		
 		//
 	
@@ -121,8 +144,59 @@ int main(int argc, char *argv[]) {
 			else if(typeOfStruct==2){
 				
 				while(1){
-					
+					printf("\n1-CREATING A DOUBLE LINKED LIST\n2-PRINTING A DOUBLE LINKED LIST\n3-DELETING A DATA FROM A DOUBLE LINKED LIST\n");
+					printf("4-INSERTING A DATA TO A DOUBLE LINKED LIST\n5-COUNTING  NODES A  DOUBLE LINKED LIST\n6-DESTROYING A DOUBLE LINKED LIST\n7-GET INFORMATION\n8-BACK TO MAIN MENU\n->");
+					scanf("%d",&choice);
+							
+							while(1){
+							if(choice==1){
+								headForDouble=creatingADoubleLinkedList(headForDouble);
+								break;
+							}
+							
+							else if(choice==2){
+								printingDoubleLinkedList(headForDouble);
+								break;
+							}
+							
+							else if(choice==3){
+								headForDouble=deletingADataFromADoubleList(headForDouble);
+								break;
+							}				
+							
+							else if(choice==4){
+								headForDouble=insertingADatatoDoubleList(headForDouble);
+								break;
+							}
+							
+							else if(choice==5){
+								countingNodeInADoubleList(headForDouble);
+								break;
+							}
+														
+							else if(choice==6){
+								headForDouble=destroyingADoubleLinkedList(headForDouble);
+								break;
+							}
+													
+							else if(choice==7){
+								getInformation(typeOfStruct);
+								break;
+							}
+													
+							else if(choice==8)
+								break;
+						
+							else{
+								printf("\nYOU HAVE DIALED WRONG!\n");
+								break;
+							}
+							
+						}
+						if(choice==8)
+							break;
 					}
+				
 				
 			}
 			else if(typeOfStruct==3){
@@ -412,6 +486,246 @@ node* destroyingALinkedList(node*head){
 
 
 
+// DOOUBLE FUNCTIONS
+
+bigNode* creatingADoubleLinkedList(bigNode* head){
+
+	int theNumberOfNode,i;
+	bigNode *temp,*back;
+	printf("\nPLEASE ENTER THE NUMBER OF NODE->");
+	scanf("%d",&theNumberOfNode);
+	
+	for(i=0;i<theNumberOfNode;i++){
+		
+		if(i==0){
+			head=(bigNode*)malloc(sizeof(bigNode));
+			printf("PLEASE ENTER THE %d.DATA->",i+1);
+			scanf("%d",&head->data);
+			
+			head->next=NULL;
+			head->previous=NULL;	
+			temp=head;
+			back=head;
+		}else{
+			temp->next=(bigNode*)malloc(sizeof(bigNode));
+			temp=temp->next;
+			printf("PLEASE ENTER THE %d.DATA->",i+1);
+			scanf("%d",&temp->data);
+			temp->previous=back;
+			back=temp;
+		
+		}
+		
+	}
+	temp->next=NULL;
+	
+	return head;
+	
+}
+void printingDoubleLinkedList(bigNode* head){
+	
+	bigNode* temp=head;
+	
+	int printingChoice;
+	
+	printf("In which direction do you want the information displayed?\n1-STRAIGHT\n2-REVERSE\n->");
+	scanf("%d",&printingChoice);
+	
+	switch(printingChoice){
+		case 1:
+			printf("\n");
+		while(temp!=NULL){
+			printf("%d ",temp->data);
+			temp=temp->next;
+		}
+		printf("\n");
+		break;
+		case 2:
+			printf("\n");
+			
+			while(temp->next!=NULL){
+			temp=temp->next;
+		}
+		
+		while(temp->previous!=NULL){
+			printf("%d ",temp->data);
+			temp=temp->previous;   // neden previous yok
+		}
+		printf("%d ",temp->data);
+			printf("\n");
+		break;
+		default:
+			printf("\nYOU HAVE DIALED WRONG!\n");
+			break;
+}
+}
+bigNode* destroyingADoubleLinkedList(bigNode* head){
+	bigNode *helperNode=head;
+	while(head!=NULL){
+		head=head->next;
+		free(helperNode);
+		helperNode=head;
+	}
+	return head;
+}
+void countingNodeInADoubleList(bigNode* head){
+	int counter=0;
+	while(head!=NULL){
+		head=head->next;
+		counter++;
+	}
+	printf("\nTHE DOUBLE LIST YOU ENTERED HAS %d NODES\n",counter);
+}
+bigNode* deletingADataFromADoubleList(bigNode* head){ // can be written another way 
+	
+	if(head==NULL){
+		printf("\nYOU HAVE NOT A DOUBLE LIST! PLEASE BEFORE INSERTING CREATE A CIRCULAR LIST FIRST.\n");
+		return head;
+	}
+	
+	int dataWillBeDeleted;
+	bigNode *nodeWillBeDeleted,*temp=head;
+	
+	printf("\nPLEASE ENTER THE DATA WILL BE DELETED\n");
+	scanf("%d",&dataWillBeDeleted);
+	
+	
+	if(head->data==dataWillBeDeleted){
+		head=head->next;
+		free(temp);
+		return head;
+	}
+	else{
+		while( temp->next->data!=dataWillBeDeleted && temp->next->next!=NULL){	
+							temp=temp->next;
+					}
+					
+					if(temp->next->data==dataWillBeDeleted && temp->next->next==NULL){
+						
+						nodeWillBeDeleted=temp->next;
+						temp->next=NULL;
+						free(nodeWillBeDeleted);
+						return head;
+					
+					}
+					else if(temp->next->data==dataWillBeDeleted){
+						
+						nodeWillBeDeleted=temp->next;
+						temp->next=nodeWillBeDeleted->next;
+						nodeWillBeDeleted->next->previous=temp;	
+						free(nodeWillBeDeleted);
+						return head;
+				
+				}
+				else{
+						printf("\nTHE DATA YOU ENTERED NOT FOUND IN THIS LINKED LIST!\n");
+						return head;
+				}
+		}	
+			
+	}	
+bigNode* insertingADatatoDoubleList(bigNode* head){
+	
+	if(head==NULL){
+		printf("\nYOU HAVE NOT A DOUBLE LIST! PLEASE BEFORE INSERTING CREATE A CIRCULAR LIST FIRST.\n");
+		return head;
+	}
+	
+	int dataWillBeInserted,insertedChoice,dataPoint;
+	bigNode *temp,*nodeWillBeInserted;
+
+	printf("PLEASE ENTER THE DATA YOU WANT TO INSERT->");
+	scanf("%d",&dataWillBeInserted);
+	
+	printf("PLEASE ENTER THE POINT TO BE PLACE THE DATA ->");
+	scanf("%d",&dataPoint);
+	
+	printf("THE DATA INSERTED BEFORE or AFTER? PLEASE PRESS 1 for BEFORE 2 for AFTER\n->");
+	scanf("%d",&insertedChoice);
+	
+		
+		switch(insertedChoice){
+		case 1:
+				
+				temp=head;
+				
+					
+				if(temp->data==dataPoint) //for root
+				{				
+					nodeWillBeInserted=(bigNode*)malloc(sizeof(node));
+					nodeWillBeInserted->data=dataWillBeInserted;
+					nodeWillBeInserted->previous=NULL;
+					nodeWillBeInserted->next=temp;
+					head=nodeWillBeInserted;
+					break;
+				}
+				else{ // middle and last
+					while(temp->next!=NULL && temp->next->data!=dataPoint){// will stop on before node
+						
+						temp=temp->next;
+					}
+					if(temp->next->data==dataPoint || temp->next==NULL){
+						nodeWillBeInserted=(bigNode*)malloc(sizeof(node));
+						nodeWillBeInserted->data=dataWillBeInserted;
+						nodeWillBeInserted->next=temp->next;
+						temp->next=nodeWillBeInserted;
+						break;
+					}
+					else{
+						printf("THE DATA YOU ENTERED NOT FOUND IN THIS LINKED LIST!");
+						break;
+					}
+				}
+			
+			break;
+		
+		case 2:
+				temp=head;
+				
+
+				if(temp->data==dataPoint)
+				{
+					nodeWillBeInserted=(node*)malloc(sizeof(node));
+					nodeWillBeInserted->data=dataWillBeInserted;
+					nodeWillBeInserted->next=temp->next;
+					temp->next=nodeWillBeInserted;
+					nodeWillBeInserted->previous=temp;
+					break;
+				}
+				else{
+					while(temp->next!=NULL && temp->data!=dataPoint){ //will stop on the node
+						temp=temp->next;
+					}
+					if(temp->data==dataPoint || temp->next==NULL){
+						
+						nodeWillBeInserted=(node*)malloc(sizeof(node));
+						nodeWillBeInserted->data=dataWillBeInserted;
+						nodeWillBeInserted->next=temp->next;
+						temp->next=nodeWillBeInserted;
+						nodeWillBeInserted->previous=temp;	
+					}
+					else{
+						printf("\nTHE DATA YOU ENTERED NOT FOUND IN THIS LINKED LIST!\n");
+					}
+				}
+				
+				break;
+				
+				default:
+				printf("\nYOU HAVE DIALED WRONG!\n");
+				break;		
+			}
+		return head;
+	}
+//
+
+
+
+
+
+
+
+
 
 void getInformation(int typeOfStruct){
 		if(typeOfStruct==1){
@@ -428,10 +742,13 @@ void getInformation(int typeOfStruct){
 
 	else if(typeOfStruct==2){
 		
-	printf("\n\n\n\nTYPE:DOUBLE LINKED LIST\n\nDEFINITION:  a doubly linked list is a linked data structure that consists of a set of sequentially linked records called nodes. Each node contains three fields: two link fields (references to the previous and to the next node in the sequence of nodes) and one data field. The beginning and ending nodes' previous and next links, respectively, point to some kind of terminator, typically a sentinel node or null, to facilitate traversal of the list. If there is only one sentinel node, then the list is circularly linked via the sentinel node. It can be conceptualized as two singly linked lists formed from the same data items, but in opposite sequential orders.The two node links allow traversal of the list in either direction. While adding or removing a node in a doubly linked list requires changing more links than the same operations on a singly linked list, the operations are simpler and potentially more efficient (for nodes other than first nodes) because there is no need to keep track of the previous node during traversal or no need to traverse the list to find the previous node, so that its link can be modified. \n\nAPPLICATION'S of LINKED LIST\n\n%c It is used in the navigation systems where front and back navigation is required.\n%c It is used by the browser to implement backward and forward navigation of visited web pages that is a back and forward button.\n%c It is also used to represent a classic game deck of cards.\n%c It is also used by various applications to implement undo and redo functionality.\n%c Other data structures like stacks, Hash Tables, Binary trees can also be constructed or programmed using a doubly-linked list.\n%c Also in many operating systems, the thread scheduler(the thing that chooses what process needs to run at which time) maintains a doubly-linked list of all processes running at that time.\n\n\n",175,175,175,175,175,175,175,175,175);
-	printf(" PROS \t\t\t\t|\t\t\t\t CONS\n(+)Reversing the doubly linked list is very easy  \t\t(-)It uses extra memory when compared to the array and singly linked list.");
-	printf("\n(+)It can allocate or reallocate memory easily during its execution.  \t\t\t\t(-)elements in memory are stored randomly, therefore the elements are accessed sequentially no direct access is allowed.");
-	printf("\n(+)As with a singly linked list, it is the easiest data structure to implement.\n\n\n");
+	printf("\n\n\n\nTYPE:DOUBLE LINKED LIST\n\nDEFINITION: is a linear data structure that contains an extra pointer, typically called the previous pointer, together with the next pointer and data which are there in a singly linked list. ");
+	printf(" \n\nPROS \t\t\t\t\t\t|\t\t\t\t\t CONS\n(+)Dynamic data structure  \t\t\t\t\t\t\t(-)Memory usage");
+	printf("\n(+) Bidirectional which is not possible in a singly linked list. %c%c%c%c%c%c\t\t(-)Slower Traversing",32,32,32,32,32,32,32);
+	printf("\n(+)Implementing graph algorithms.  \t\t\t\t\t\t\(-)Implementing more complex");
+	printf("\n(+)a low overhead compared to other data structures such as arrays.  %c%c%c%c%c\t(-)Reverse Traversing",32,32,32,32,32);
+	printf("\n(+)Deletion of nodes is easy as compared to a Singly Linked List.  \t\t(-)Random Access\n\n\n");
+	
 
 		
 	}
