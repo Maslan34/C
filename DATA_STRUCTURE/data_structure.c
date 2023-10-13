@@ -55,8 +55,24 @@ bigNode* destroyingADoubleLinkedList(bigNode*);
 void countingNodeInADoubleList(bigNode*);
 bigNode* deletingADataFromADoubleList(bigNode*);
 bigNode* insertingADatatoDoubleList(bigNode*);
-//DOUBLE
+//DOUBLE LIST
 
+
+
+
+
+
+
+
+
+//HERE FOR
+node* createACircularList(node*);
+node* destroyingACircularList(node*);
+void countingACircularList(node*);
+void printingACircularList(node*);
+node* deletingADataFromCircularList(node*);
+
+//CIRCULAR LIST
 
 
 
@@ -69,6 +85,7 @@ int main(int argc, char *argv[]) {
 		int typeOfStruct,choice,dataForStack,stackType;
 		node* head=NULL;	
 		bigNode* headForDouble=NULL;
+		node* headForCircular=NULL;
 		
 		//
 	
@@ -201,11 +218,60 @@ int main(int argc, char *argv[]) {
 			}
 			else if(typeOfStruct==3){
 					
-						
 				while(1){
-				
+							
+					printf("\n1-CREATING A CIRCULAR LIST\n2-PRINTING A CIRCULAR LIST\n3-DELETING A DATA FROM A CURCULAR LIST\n");
+					printf("4-INSERTING A DATA TO A CIRCULAR LIST\n5-COUNTING  NODES A CIRCULAR LIST\n6-DESTROYING A CIRCULAR LIST\n7-GET INFORMATION\n8-BACK TO MAIN MENU\n->");
+					scanf("%d",&choice);
+							
+							while(1){
+								if(choice==1){
+									headForCircular=createACircularList(headForCircular);
+									break;
+								}
+								
+								else if(choice==2){
+									printingACircularList(headForCircular);
+									break;
+								}
+								
+								else if(choice==3){
+									headForCircular=deletingADataFromCircularList(headForCircular);
+									break;
+								}				
+								
+								else if(choice==4){
+									headForCircular=insertingADataToCircularList(headForCircular);
+									break;
+								}
+								
+								else if(choice==5){
+									countingACircularList(headForCircular);
+									break;
+								}
+															
+								else if(choice==6){
+									headForCircular=destroyingACircularList(headForCircular);
+									break;
+								}
+														
+								else if(choice==7){
+								getInformation(typeOfStruct);
+								break;
+							}
+													
+							else if(choice==8)
+								break;
+						
+							else{
+								printf("\nYOU HAVE DIALED WRONG!\n");
+								break;
+							}
+							
+						}
+						if(choice==8)
+							break;
 					}
-				
 			}
 			
 			if(typeOfStruct==4)
@@ -720,6 +786,300 @@ bigNode* insertingADatatoDoubleList(bigNode* head){
 //
 
 
+// CIRCULAR LIST FUNCTIONS
+
+
+node* createACircularList(node* head){
+	
+	int theNumberOfNode,i;
+	node* temp;
+	printf("\nPLEASE ENTER THE NUMBER OF NODE->");
+	scanf("%d",&theNumberOfNode);
+	
+	for(i=0;i<theNumberOfNode;i++){
+		
+		if(i==0){
+			
+			head=(node*)malloc(sizeof(node));
+			printf("PLEASE ENTER THE %d.DATA->",i+1);
+			scanf("%d",&head->data);
+			head->next=head;
+			temp=head;
+			//printf("%d ",head->data);
+				
+		}
+			else{
+				temp->next=(node*)malloc(sizeof(node));
+				temp=temp->next;
+				printf("PLEASE ENTER THE %d.DATA->",i+1);
+				scanf("%d",&temp->data);
+				//printf("%d ",temp->data);
+			}
+		
+		}
+	temp->next=head;
+	
+	return head;
+}
+void printingACircularList(node* head){
+	
+	node* temp=head;
+	int printingChoice;
+	node* stop;
+	
+	printf("In which direction do you want the information displayed?\n1-STRAIGHT\n2-REVERSE\n->");
+	scanf("%d",&printingChoice);
+	
+	switch(printingChoice){
+		case 1:
+			printf("\n");
+			
+			if(head==NULL){
+					printf("\nYOU HAVE NOT A CIRCULAR LIST!");
+					return;
+				}
+	
+			if(head->next==head){
+					printf("%d ",head->data);
+					return;
+				}
+			do{
+			
+				printf("%d ",temp->data);
+				temp=temp->next;
+			}while(temp!=head);
+			 
+		printf("\n");
+		
+		break;	
+		case 2:
+
+		
+			
+			printf("\n");
+			
+			
+			
+			if(head==NULL){
+					printf("\nYOU HAVE NOT A CIRCULAR LIST!");
+					return;
+				}
+			
+			
+				node* temp = head;
+		    	node* stop = head;
+			    do {
+			    	while(temp->next!=stop){
+			    		temp=temp->next;
+					}
+					stop=temp;
+					temp=head;
+			        printf("%d ", stop->data);
+			     
+			    } while (temp != stop);
+
+			printf("\n");
+		
+		break;
+		default:
+			printf("\nYOU HAVE DIALED WRONG!\n");
+			break;
+	
+	}
+}
+void countingACircularList(node*head){
+	int counter=1;
+	node* temp;
+	temp=head;
+
+	while(temp->next!=head)
+	{
+		++counter;
+		temp=temp->next;
+	}
+	
+	printf("\nTHE LINKED LIST YOU ENTERED HAS %d NODES\n",counter);
+	
+}
+node* destroyingACircularList(node* head){ 
+	
+				node * temp=head;
+				node * garbage;
+				if(head->next==head){ // only one nodes
+					free(head);
+					return NULL;
+				}
+				temp=temp->next;
+				while(temp->next !=head){
+					garbage=temp;
+					printf("%d ",garbage->data);
+					temp=temp->next;
+				
+				}
+			// printf("%d ",temp->next->data); // deleting head
+			free(temp->next);
+			// printf("%d ",temp->data); // deleting last node
+			free(temp);
+	
+	return NULL;
+}
+node* deletingADataFromCircularList(node* head){
+
+	int dataWillBeDeleted;
+	node* nodeWillBeDeleted,*last;
+	node* temp=head;
+	
+	printf("\nPLEASE ENTER THE DATA WILL BE DELETED->\n");
+	scanf("%d",&dataWillBeDeleted);
+	
+					if(head == NULL) {
+					printf("\nNO DATA IN THE LIST\n");
+					return;
+					}
+					
+					if(temp -> next == head) { // CHECKING WHETHER FIRST NODE WILL BE DELETED OR NOT.
+						free(temp);
+						return NULL;
+					}
+					
+					else if(head -> data == dataWillBeDeleted) { // ONLY ONE NODE.
+		
+						last=head;
+						while(last -> next != head)
+						last = last -> next;
+						head = head -> next; 
+						last->next=head;
+						free(temp);
+					}
+					
+					else {
+						
+						while(temp -> next -> data != dataWillBeDeleted) {
+							if(temp -> next -> next == NULL) {
+								printf("\n\nDATA NOT FOUND IN THE LIST.\n\n");
+								return head;
+							}
+							temp = temp -> next;
+						}
+						struct node *temp2 = temp -> next;
+						temp -> next = temp -> next -> next;
+						free(temp2);
+					}
+					return head;
+}
+
+node* insertingADataToCircularList(node* head){
+	
+	int dataWillBeInserted,dataPoint,insertedChoice;
+	node *nodeWillBeInserted,*temp,*temp2;
+	
+	if(head==NULL){
+		printf("\nYOU HAVE NOT A CREATED LIST! PLEASE BEFORE INSERTING CREATE A CIRCULAR LIST FIRST.\n");
+		return head;
+	}
+	
+	printf("\nPLEASE ENTER THE DATA WILL BE INSERTED\n");
+	scanf("%d",&dataWillBeInserted);
+	
+	printf("PLEASE ENTER THE MARKER TO BE PLACE THE DATA ->");
+	scanf("%d",&dataPoint);
+	
+	printf("THE DATA INSERTED BEFORE or AFTER? PLEASE PRESS 1 for BEFORE 2 for AFTER\n->");
+	scanf("%d",&insertedChoice);
+	
+	temp=head;
+	
+	while(temp->next!=head){
+		temp=temp->next;
+	}
+	if(temp->data!=dataPoint){
+		printf("\n\nMARKER NOT FOUND IN THE LIST\n\n");
+		return head;
+	}
+	
+	else{
+		switch(insertedChoice){
+		case 1:
+			
+				
+			
+				if(head->data==dataPoint) //only one node
+				{				
+					nodeWillBeInserted=(node*)malloc(sizeof(node));
+					nodeWillBeInserted->data=dataWillBeInserted;
+					nodeWillBeInserted->next=head;
+					head=nodeWillBeInserted;
+					temp->next=nodeWillBeInserted;
+					break;
+				}
+				else if(temp->data==dataPoint){
+					nodeWillBeInserted=(node*)malloc(sizeof(node));
+					nodeWillBeInserted->data=dataWillBeInserted;
+					nodeWillBeInserted->next=head;
+					while(temp->next!=head){// will stop on before node
+						temp=temp->next;
+					}
+					temp->next=nodeWillBeInserted;
+					head=nodeWillBeInserted;
+				
+					
+					break;
+				}else{
+					while(temp->next!=head && temp->next->data!=dataPoint){// will stop on before node
+						temp=temp->next;
+					}
+					
+						nodeWillBeInserted=(node*)malloc(sizeof(node));
+						nodeWillBeInserted->data=dataWillBeInserted;
+						nodeWillBeInserted->next= temp->next;
+						temp->next=nodeWillBeInserted;
+						break;
+					
+				}
+			
+		break;
+		case 2:
+			
+				temp=head;
+				
+				if(head->next==head) //only one node
+				{				
+					nodeWillBeInserted=(node*)malloc(sizeof(node));
+					nodeWillBeInserted->data=dataWillBeInserted;
+					head->next=nodeWillBeInserted;
+					nodeWillBeInserted->next=head;
+					break;
+				}
+				else{
+					
+					while(temp->next!=head && temp->data!=dataPoint){// will stop on  node
+						temp=temp->next;
+					}
+						if(temp->next->data!=dataPoint){
+							printf("\n\nMARKER NOT FOUND IN THE LIST\n\n");
+							return head;
+						}
+						nodeWillBeInserted=(node*)malloc(sizeof(node));
+						nodeWillBeInserted->data=dataWillBeInserted;
+						nodeWillBeInserted->next=temp->next;
+						temp->next=nodeWillBeInserted;
+						break;
+					
+				}
+			default:
+			printf("YOU HAVE DIALED WRONG!");
+			break;
+		}
+	}
+		
+	
+
+return head;
+}
+
+
+//
+
 
 
 
@@ -754,15 +1114,13 @@ void getInformation(int typeOfStruct){
 	}
 	else if(typeOfStruct==3){
 		
-	printf("\n\n\n\nTYPE:CIRCULAR LIST\n\nDEFINITION: The circular linked list is a linked list where all nodes are connected to form a circle. In a circular linked list, the first node and the last node are connected to each other which forms a circle. There is no NULL at the end. \n\nAPPLICATION'S of LINKED LIST\n\n%c Circular Linked Lists can be used to manage the computing resources of the computer.\n%c Data structures such as stacks and queues are implemented with the help of the circular linked lists.\n%c Circular Linked List is also used in the implementation of advanced data structures such as a Fibonacci Heap.\n%c It is also used in computer networking for token scheduling.\n\n\n",175,175,175,175);
-	printf(" PROS \t\t\t|\t\t\t CONS\n(+)Dynamic data structure  \t\t(-)If the circular linked list is not handled properly then it can lead to an infinite loop as it is circular in nature.");
-	printf("\n(+)It is possible to traverse from the last node back to the first i.e. the head node. %c%c%c%c%c%c\t\t(-)In comparison with singly-linked lists, doubly linked lists are more complex in nature",32,32,32,32,32,32,32);
-	printf("\n(+)The starting node does not matter as we can traverse each and every node despite whatever node we keep as the starting node.  \t\t(-)Direct accessing of elements is not possible.");
-	printf("\n(+)The previous node can be easily identified.  %c%c%c%c%c\t\t(-)It is generally a complex task to reverse a circular linked list.",32,32,32,32,32);
-	printf("\n(+)There is no need for a NULL function to code.\n");
-	printf("\n(+)Circular linked lists are beneficial for end operations as start and finish coincide.\n");
-	printf("\n(+)Algorithms such as Round Robin setup can effectively complete online queues without having to meet NULL suspension or reference references.\n\n\n");
-		
+	printf("\n\n\n\nTYPE:CIRCULAR LINKED LIST\n\nDEFINITION: is a type of linked list that is circular in nature. In a circular linked list, every node has successor. In this data structure, every node points to the next node and the last node of the linked list points to the first node.. ");
+	printf(" \n\nPROS \t\t\t\t\t\t|\t\t\t\t\t CONS\n(+) can be used to create a playlist for a music or media player  \t\t(-)Traversal can be more difficult");
+	printf("\n(+)  can be used to model the movements of vehicles on a circular route. %c%c%c%c%c%c\t(-)Complexity",32,32,32,32,32,32,32);
+	printf("\n(+)Hash table implementation.  \t\t\t\t\t\t\t(-)Lack of a natural end");
+	printf("\n(+) can be used to model the movements of vehicles on a circular route.  %c%c%c\t(-)Memory leaks",32,32,32);
+	printf("\n\n");
+
 	}
 	else if(typeOfStruct==4){
 		
@@ -772,7 +1130,7 @@ void getInformation(int typeOfStruct){
 	printf("\n(+)Dynamic data structure  \t\t(-)Traversal");
 	printf("\n(+)Implementation  %c%c%c%c%c\t\t(-)Reverse Traversing",32,32,32,32,32);
 	printf("\n(+)Insertion and Deletion Operations  \t(-)Random Access\n\n\n");
-	
+
 		
 	}
 	else if(typeOfStruct==5){
